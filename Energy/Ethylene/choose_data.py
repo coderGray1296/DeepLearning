@@ -4,6 +4,7 @@ import os
 import copy
 
 def choose():
+    '''
     techid = 0
     scaleid = 7
     path = '/Users/codergray/PycharmProjects/Energy/data/'
@@ -13,7 +14,7 @@ def choose():
     result_data = []
 
     #选出符合techid和scaleid条件的数据写入excel
-    '''
+
     for child in children:
         buf_data = pd.read_excel(child)
         result = buf_data.loc[(buf_data['techid'] == techid) & (buf_data['scaleid'] == scaleid)]
@@ -21,24 +22,17 @@ def choose():
     for i in range(len(result_data)):
         result_data[i].to_excel('/Users/codergray/PycharmProjects/Energy/data/'+str(i)+'.xls')
     '''
+    path = '/Users/codergray/PycharmProjects/Energy/data/0-7.xls'
 
     #过滤掉存在空值的数据
+    data = pd.read_excel(path)
 
-        for i in range(len(buf_data)):
-            
-            if buf_data.loc[i]['techid'] == techid and buf_data.loc[i]['scaleid'] == scaleid:
-                temp = []
-                temp.append(buf_data.loc[i]['feedtotal'])
-                temp.append(buf_data.loc[i]['fueltotal'])
-                temp.append(buf_data.loc[i]['steamtotal'])
-                temp.append(buf_data.loc[i]['watertotal'])
-                temp.append(buf_data.loc[i]['electricity'])
-                temp.append(buf_data.loc[i]['sec'])
-
-                temp.append(buf_data.loc[i]['ethylene'])
-                temp.append(buf_data.loc[i]['propylene'])
-                temp.append(buf_data.loc[i]['cfour'])
-                result_data.append( copy.deepcopy(temp))
+    for i in range(len(data)):
+        if data.loc[i]['feedtotal'] == np.nan or data.loc[i]['fueltotal'] == np.nan or data.loc[i]['steamtotal'] == np.nan or data.loc[i]['watertotal'] == np.nan or \
+                data.loc[i]['electricity'] == np.nan or data.loc[i]['sec'] == np.nan or data.loc[i]['ethylene'] == np.nan or \
+                data.loc[i]['propylene'] == np.nan or data.loc[i]['cfour'] == np.nan:
+            data.drop([i])
+    data.to_excel('/Users/codergray/PycharmProjects/Energy/data/0-7_new.xls')
 
 
 
