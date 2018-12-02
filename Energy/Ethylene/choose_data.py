@@ -31,7 +31,7 @@ def choose():
         if data.loc[i]['feedtotal'] == np.nan or data.loc[i]['fueltotal'] == np.nan or data.loc[i]['steamtotal'] == np.nan or pd.isnull(data.loc[i]['watertotal']) or \
                 data.loc[i]['electricity'] == np.nan or data.loc[i]['sec'] == np.nan or data.loc[i]['ethylene'] == np.nan or \
                 data.loc[i]['propylene'] == np.nan or data.loc[i]['cfour'] == np.nan:
-            data.drop([i])
+            data.drop([i], inplace=True)
     data.to_excel('/Users/codergray/PycharmProjects/Energy/data/0-7_new.xls')
 
 
