@@ -22,6 +22,7 @@ def choose():
     for i in range(len(result_data)):
         result_data[i].to_excel('/Users/codergray/PycharmProjects/Energy/data/'+str(i)+'.xls')
     '''
+    '''
     path = '/Users/codergray/PycharmProjects/Energy/data/0-7.xls'
 
     #过滤掉存在空值的数据
@@ -33,6 +34,20 @@ def choose():
                 data.loc[i]['propylene'] == np.nan or data.loc[i]['cfour'] == np.nan:
             data.drop([i], inplace=True)
     data.to_excel('/Users/codergray/PycharmProjects/Energy/data/0-7_new.xls')
-
-
+    '''
+    #将数据写入文档txt文件
+    data = pd.read_excel('/Users/codergray/PycharmProjects/Energy/data/0-7_new.xls')
+    #print(data['factoryn'])
+    result = []
+    for i in range(len(data)):
+        temp = []
+        temp.append(data.loc[i, 'feedtotal'])
+        temp.append(data.loc[i, 'fueltotal'])
+        temp.append(data.loc[i, 'steamtotal'])
+        temp.append(data.loc[i, 'watertotal'])
+        temp.append(data.loc[i, 'electricity'])
+        temp.append(data.loc[i, 'ethylene'] + data.loc[i, 'propylene'] + data.loc[i, 'cfour'])
+        result.append(temp)
+    result = np.array(result)
+    np.savetxt('data.txt', result)
 c = choose()
