@@ -1,13 +1,13 @@
 import pandas as pd
 import numpy as np
 
-
+#只运行一次
 def save_normalized_data(path):
     #load data from path
     data = np.loadtxt(path)
     data = normalize(data)
     np.savetxt('normalized.txt', data)
-
+#只运行一次
 def normalize(data):
     min = np.argmin(data, axis=0)
     max = np.argmax(data, axis=0)
@@ -21,6 +21,8 @@ def normalize(data):
     for i in range(len(data)):
         data[i] = (data[i] - min_value) / (max_value - min_value)
     return data
+
+#为train.py所调用
 
 def load_data(path):
     data = np.loadtxt(path).tolist()
