@@ -21,6 +21,7 @@ def choose():
         result_data.append(result)
     for i in range(len(result_data)):
         result_data[i].to_excel('/Users/codergray/PycharmProjects/Energy/data/'+str(i)+'.xls')
+
     '''
     '''
     path = '/Users/codergray/PycharmProjects/Energy/data/0-7.xls'
