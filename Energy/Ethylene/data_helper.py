@@ -9,6 +9,7 @@ def save_normalized_data(path):
     np.savetxt('normalized.txt', data)
 #只运行一次
 def normalize(data):
+    #生成数据中的最小值和最大值的索引序列
     min = np.argmin(data, axis=0)
     max = np.argmax(data, axis=0)
     min_value = []
@@ -51,3 +52,4 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
 
 
 #_, y = load_data('normalized.txt')
+

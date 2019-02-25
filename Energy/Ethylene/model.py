@@ -18,7 +18,7 @@ class CNN(object):
         for i, filter_size in enumerate(filter_sizes):
             #convolution layers 卷积核的shape为[filter_size, input_channels, num_filters]
             filter_shape = [filter_size, 1, num_filters]
-            W = tf.Variable(tf.truncated_normal(filter_size, stddev=0.1), name='W')
+            W = tf.Variable(tf.truncated_normal(filter_shape, stddev=0.1), name='W')
             b = tf.Variable(tf.constant(0.1, shape=[num_filters]), name='b')
             cnn = tf.nn.conv1d(
                 self.input_x_expanded,
@@ -65,14 +65,14 @@ class CNN(object):
             l2_loss += tf.nn.l2_loss(W)
             l2_loss += tf.nn.l2_loss(b)
             self.scores = tf.nn.xw_plus_b(self.drop, W, b, name='scores')
-            self.predictions = tf.argmax(self.scores, 1, name='predictions')
 
         with tf.name_scope('loss'):
             losses = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
             self.loss = tf.reduce_mean(losses) + l2_loss + l2_reg_lambda
-
+'''
         with tf.name_scope('accuracy'):
             correct_predictions = tf.equal(self.predictions, tf.arg_max(self.input_y, 1))
             self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, 'float'), name='accuracy')
+'''
 
 cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)
