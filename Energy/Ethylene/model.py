@@ -75,4 +75,4 @@ class CNN(object):
             self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, 'float'), name='accuracy')
 '''
 
-cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)
+#cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)
