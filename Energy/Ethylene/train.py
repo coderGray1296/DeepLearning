@@ -12,7 +12,7 @@ import draw
 test_sample_percentage = 0.2
 data_path = 'normalized.txt'
 
-filter_sizes = [3, 4, 5]
+filter_sizes = [3, 2]
 num_filters = 10
 dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
@@ -51,6 +51,8 @@ with tf.Graph().as_default():
             num_filters = num_filters,
             l2_reg_lambda = l2_reg_lambda
         )
+        print('cnn.shape:')
+        print(cnn.drop.shape)
         #定义training步骤
         global_step = tf.Variable(0, name="global_step", trainable=False)
         # print(global_step)

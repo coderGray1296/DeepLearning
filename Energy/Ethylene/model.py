@@ -37,7 +37,6 @@ class CNN(object):
                 h,
                 window_shape=[input_size - filter_size + 1],
                 pooling_type='MAX',
-                strides=1,
                 padding='VALID',
                 name='max_pool'
             )
@@ -71,8 +70,8 @@ class CNN(object):
             self.loss = tf.reduce_mean(losses) + l2_loss + l2_reg_lambda
 
         with tf.name_scope('accuracy'):
-            correct_error = tf.abs(self.loss, self.input_y)
-            self.accuracy = tf.reduce_mean(correct_error, 'float', name='accuracy')
+            correct_error = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
+            self.accuracy = tf.reduce_mean(correct_error)
 
 
 #cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)
