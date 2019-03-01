@@ -69,10 +69,10 @@ class CNN(object):
         with tf.name_scope('loss'):
             losses = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
             self.loss = tf.reduce_mean(losses) + l2_loss + l2_reg_lambda
-'''
+
         with tf.name_scope('accuracy'):
-            correct_predictions = tf.equal(self.predictions, tf.arg_max(self.input_y, 1))
-            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, 'float'), name='accuracy')
-'''
+            correct_error = tf.abs(self.loss, self.input_y)
+            self.accuracy = tf.reduce_mean(correct_error, 'float', name='accuracy')
+
 
 #cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)

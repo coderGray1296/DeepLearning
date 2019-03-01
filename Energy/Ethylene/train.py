@@ -29,6 +29,10 @@ num_checkpoints = 5
 #Data Preparation
 print('Loading data...')
 X, y = data_helper.load_data(data_path)
+X = np.array(X)
+y = np.array(y)
+print('X.shape:')
+print(X.shape)
 
 # Split train/test set
 test_sample_index =  -1 * int(test_sample_percentage * float(len(y)))
