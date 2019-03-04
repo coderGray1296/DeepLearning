@@ -18,7 +18,7 @@ dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
 
 batch_size = 16
-num_epochs = 10
+num_epochs = 50
 #Evaluate model on dev set after this many steps (default: 100)
 evaluate_every = 100
 #Save model after this many steps (default: 100)
@@ -31,8 +31,7 @@ print('Loading data...')
 X, y = data_helper.load_data(data_path)
 X = np.array(X)
 y = np.array(y)
-print('X.shape:')
-print(X.shape)
+
 
 # Split train/test set
 test_sample_index =  -1 * int(test_sample_percentage * float(len(y)))
