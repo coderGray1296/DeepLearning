@@ -7,6 +7,7 @@ class CNN(object):
         self.input_x = tf.placeholder(tf.float32, [None, input_size], name='input')
         self.input_y = tf.placeholder(tf.float32, [None, output_size], name='output')
         self.dropout_keep_prob = tf.placeholder(tf.float32, name='dropout')
+        print(self.input_x.shape)
 
         l2_loss = tf.constant(0.0)
 
@@ -66,12 +67,12 @@ class CNN(object):
             self.scores = tf.nn.xw_plus_b(self.drop, W, b, name='scores')
 
         with tf.name_scope('loss'):
-            losses = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
-            self.loss = tf.reduce_mean(losses) + l2_loss + l2_reg_lambda
+            self.losses = abs(self.scores - self.input_y)
+            self.loss = tf.reduce_mean(self.losses)
 
         with tf.name_scope('accuracy'):
             correct_error = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
-            self.accuracy = tf.reduce_mean(correct_error)
+            self.accuracy = l2_loss
 
 
 #cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)

@@ -18,9 +18,9 @@ dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
 
 batch_size = 16
-num_epochs = 50
+num_epochs = 100
 #Evaluate model on dev set after this many steps (default: 100)
-evaluate_every = 100
+evaluate_every = 20
 #Save model after this many steps (default: 100)
 checkpoint_every = 100
 #Number of checkpoints to store (default: 5)
@@ -28,15 +28,8 @@ num_checkpoints = 5
 
 #Data Preparation
 print('Loading data...')
-X, y = data_helper.load_data(data_path)
-X = np.array(X)
-y = np.array(y)
-
-
-# Split train/test set
-test_sample_index =  -1 * int(test_sample_percentage * float(len(y)))
-x_train, x_test = X[:test_sample_index], X[test_sample_index:]
-y_train, y_test = y[:test_sample_index], y[test_sample_index:]
+x_train, y_train = data_helper.load_data('train.txt')
+x_test, y_test = data_helper.load_data('test.txt')
 
 #Training
 #==========================>
@@ -80,13 +73,14 @@ with tf.Graph().as_default():
             feed_dict = {
                 cnn.input_x: x_batch,
                 cnn.input_y: y_batch,
-                cnn.dropout_keep_prob: 1.0
+                cnn.dropout_keep_prob: 0.5
             }
-            step, loss, accuracy = sess.run([global_step, cnn.loss, cnn.accuracy],
+            print(x_batch.shape)
+            step, losses, loss, accuracy = sess.run([global_step, cnn.losses, cnn.loss, cnn.accuracy],
                                                        feed_dict)
-            time_str = datetime.datetime.now().isoformat()
-            print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
-            return loss, accuracy
+            #time_str = datetime.datetime.now().isoformat()
+            #print("{}: step {},loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
+            return losses
 
         batches = data_helper.batch_iter(list(zip(x_train, y_train)), batch_size, num_epochs)
 
@@ -100,6 +94,7 @@ with tf.Graph().as_default():
             train_loss_all.append(loss_train)
             train_accuracy_all.append(accuracy_train)
             current_step = tf.train.global_step(sess, global_step)
+            '''
             #每evaluate_every进行一次测试
             if current_step % evaluate_every == 0:
                 print('\nTesting:')
@@ -107,8 +102,14 @@ with tf.Graph().as_default():
                 test_loss_all.append(loss_test)
                 test_accuracy_all.append(accuracy_test)
                 print("")
+            '''
+
+
+        losses = test_step(x_test, y_test)
+        print(losses)
+
         # draw picture for loss and accuracy of test and train
         draw.draw_picture('train', train_accuracy_all, train_loss_all)
-        draw.draw_picture('test', test_accuracy_all, test_loss_all)
+        #draw.draw_picture('test', test_accuracy_all, test_loss_all)
 
         print('modelling finished!')

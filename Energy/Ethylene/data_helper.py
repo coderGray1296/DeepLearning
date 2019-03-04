@@ -32,7 +32,7 @@ def load_data(path):
     for i in range(len(data)):
         X.append(data[i][0:5])
         y.append(data[i][5:])
-    return X, y
+    return np.array(X), np.array(y)
 
 #读取数据，分离train和test
 def split(test_sample_percentage,path):
