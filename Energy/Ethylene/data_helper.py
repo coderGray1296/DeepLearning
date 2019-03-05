@@ -60,6 +60,23 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             end_index = min((num_batch + 1) * batch_size, data_size)
             yield data_shufled[start_index : end_index]
 
-#split(0.2, 'normalized.txt') /137
+#split(0.2, 'normalized.txt') 34/137
 #_, y = load_data('normalized.txt')
 
+# 交叉特征
+def save_featurecrosses_data(path):
+    data = np.loadtxt(path)
+    data_new = []
+    #进行两两交叉
+    for i in range(len(data)):
+        temp = []
+        for j in range(len(data[i])-2):
+            for k in range(j+1,len(data[i])-1):
+                temp.append(data[i][j]*data[i][k])
+        temp.append(data[i][-1])
+        data_new.append(temp)
+    data_new = np.array(data_new)
+    np.savetxt('data_new.txt', data_new)
+
+
+save_featurecrosses_data('data.txt')
