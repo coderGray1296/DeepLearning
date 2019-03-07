@@ -30,8 +30,8 @@ def load_data(path):
     X = []
     y = []
     for i in range(len(data)):
-        X.append(data[i][0:5])
-        y.append(data[i][5:])
+        X.append(data[i][0:10])
+        y.append(data[i][10:])
     return np.array(X), np.array(y)
 
 #读取数据，分离train和test
@@ -40,8 +40,8 @@ def split(test_sample_percentage,path):
     shuffled_data = np.random.permutation(data)
     test_sample_index = -1 * int(test_sample_percentage * float(len(shuffled_data)))
     train, test = shuffled_data[:test_sample_index], shuffled_data[test_sample_index:]
-    np.savetxt('train.txt', train)
-    np.savetxt('test.txt', test)
+    np.savetxt('train_new.txt', train)
+    np.savetxt('test_new.txt', test)
 
 
 #generator batch data with shuffled
@@ -67,7 +67,7 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
 def save_featurecrosses_data(path):
     data = np.loadtxt(path)
     data_new = []
-    #进行两两交叉
+    #进行两两交叉3
     for i in range(len(data)):
         temp = []
         for j in range(len(data[i])-2):
@@ -75,8 +75,10 @@ def save_featurecrosses_data(path):
                 temp.append(data[i][j]*data[i][k])
         temp.append(data[i][-1])
         data_new.append(temp)
+    data_new = normalize(data_new)
     data_new = np.array(data_new)
+
     np.savetxt('data_new.txt', data_new)
 
 
-save_featurecrosses_data('data.txt')
+split(0.2, 'data_new.txt')

@@ -4,21 +4,21 @@ import time
 import datetime
 import os
 from model import CNN
+from model_new import CNN_NEW
 import data_helper
 from tensorflow.contrib import learn
 import draw
 
 #设置训练集和测试集为4：1
 test_sample_percentage = 0.2
-data_path = 'normalized.txt'
 
-filter_sizes = [3]
-num_filters = 10
+filter_sizes = [5, 2]
+num_filters = [3, 5]
 dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
 
 batch_size = 16
-num_epochs = 200
+num_epochs = 10
 #Evaluate model on dev set after this many steps (default: 100)
 evaluate_every = 10
 #Save model after this many steps (default: 100)
@@ -28,8 +28,8 @@ num_checkpoints = 5
 
 #Data Preparation
 print('Loading data...')
-x_train, y_train = data_helper.load_data('train.txt')
-x_test, y_test = data_helper.load_data('test.txt')
+x_train, y_train = data_helper.load_data('train_new.txt')
+x_test, y_test = data_helper.load_data('test_new.txt')
 
 
 #Training
@@ -37,7 +37,7 @@ x_test, y_test = data_helper.load_data('test.txt')
 with tf.Graph().as_default():
     sess = tf.Session()
     with sess.as_default():
-        cnn = CNN(
+        cnn = CNN_NEW(
             input_size = x_train.shape[1],
             output_size = y_train.shape[1],
             filter_sizes = filter_sizes,
@@ -79,11 +79,11 @@ with tf.Graph().as_default():
                                               feed_dict)
             # time_str = datetime.datetime.now().isoformat()
             # print("{}: step {},loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
-            return losses
+            return loss, accuracy
 
 
         model_saver = tf.train.Saver()
-        '''
+
         batches = data_helper.batch_iter(list(zip(x_train, y_train)), batch_size, num_epochs)
 
         train_loss_all = []
@@ -118,3 +118,4 @@ with tf.Graph().as_default():
                 if losses[j][0] < 0.01:
                     result.append(j)
             print(result)
+        '''
