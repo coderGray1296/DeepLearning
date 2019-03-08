@@ -9,7 +9,6 @@ class CNN_NEW(object):
         self.input_y = tf.placeholder(tf.float32, [None, output_size], name='output')
         self.dropout_keep_prob = tf.placeholder(tf.float32, name='dropout')
         print(self.input_x.shape)
-
         l2_loss = tf.constant(0.0)
 
         # 为input增加维度input_x.shape拓宽为[batch_size, input_size, input_channels]
@@ -101,7 +100,7 @@ class CNN_NEW(object):
             self.loss = tf.reduce_mean(self.losses)
 
         with tf.name_scope('accuracy'):
-            correct_error = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
+            #correct_error = tf.nn.softmax_cross_entropy_with_logits(logits=self.scores, labels=self.input_y)
             self.accuracy = l2_loss
 
 # cnn = CNN(input_size=5, output_size=1, filter_sizes=[3,4,5], num_filters=10, l2_reg_lambda=0.0)

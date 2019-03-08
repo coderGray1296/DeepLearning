@@ -18,7 +18,7 @@ dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
 
 batch_size = 16
-num_epochs = 10
+num_epochs = 200
 #Evaluate model on dev set after this many steps (default: 100)
 evaluate_every = 10
 #Save model after this many steps (default: 100)
@@ -79,11 +79,11 @@ with tf.Graph().as_default():
                                               feed_dict)
             # time_str = datetime.datetime.now().isoformat()
             # print("{}: step {},loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
-            return loss, accuracy
+            return losses
 
 
         model_saver = tf.train.Saver()
-
+        '''
         batches = data_helper.batch_iter(list(zip(x_train, y_train)), batch_size, num_epochs)
 
         train_loss_all = []
@@ -118,4 +118,4 @@ with tf.Graph().as_default():
                 if losses[j][0] < 0.01:
                     result.append(j)
             print(result)
-        '''
+
