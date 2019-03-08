@@ -62,8 +62,8 @@ with tf.Graph().as_default():
                 cnn.input_y: y_batch,
                 cnn.dropout_keep_prob: dropout_keep_prob
             }
-            _, step, loss, accuracy = sess.run(
-                [train_op, global_step, cnn.loss, cnn.accuracy], feed_dict)
+            _, step, losses, loss, accuracy = sess.run(
+                [train_op, global_step, cnn.losses, cnn.loss, cnn.accuracy], feed_dict)
             time_str = datetime.datetime.now().isoformat()
             print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
             return loss, accuracy
@@ -79,11 +79,11 @@ with tf.Graph().as_default():
                                               feed_dict)
             # time_str = datetime.datetime.now().isoformat()
             # print("{}: step {},loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
-            return losses
+            return loss, accuracy
 
 
         model_saver = tf.train.Saver()
-        '''
+
         batches = data_helper.batch_iter(list(zip(x_train, y_train)), batch_size, num_epochs)
 
         train_loss_all = []
@@ -111,11 +111,11 @@ with tf.Graph().as_default():
         '''
         ckpt = tf.train.get_checkpoint_state("../checkpoint/")
         model_saver.restore(sess, ckpt.model_checkpoint_path)
+        #losses = test_step(x_test, y_test)
+        #print(losses)
+
         for i in range(10):
             result = []
-            losses = test_step(x_test, y_test)
-            for j in range(len(losses)):
-                if losses[j][0] < 0.01:
-                    result.append(j)
-            print(result)
-
+            loss, _ = test_step(x_test, y_test)
+            print(loss)
+        '''

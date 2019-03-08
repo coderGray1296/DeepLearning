@@ -17,7 +17,7 @@ class CNN_NEW(object):
 
         # create convolution + maxpool for every layer
 
-        #第一层卷积层和最大池化层
+        #第一层卷积层和最大池化层(batch_size,10,1)==>(batch_size,4,3)
         filter_shape_1 = [filter_sizes[0], 1, num_filters[0]]
         W_1 = tf.Variable(tf.truncated_normal(filter_shape_1, stddev=0.1), name='W')
         b_1 = tf.Variable(tf.constant(0.1, shape=[num_filters[0]]), name='b')
@@ -44,7 +44,7 @@ class CNN_NEW(object):
         print('pooled_1.shape is:')
         print(pooled_1.shape)
 
-        #第二层卷积层和最大池化层
+        #第二层卷积层和最大池化层(batch_size,4,3)==>(batch_size,1,5)
 
         filter_shape_2 = [filter_sizes[1], num_filters[0], num_filters[1]]
         W_2 = tf.Variable(tf.truncated_normal(filter_shape_2, stddev=0.1), name='W')
@@ -94,9 +94,8 @@ class CNN_NEW(object):
             l2_loss += tf.nn.l2_loss(W)
             l2_loss += tf.nn.l2_loss(b)
             self.scores = tf.nn.xw_plus_b(self.drop, W, b, name='scores')
-
         with tf.name_scope('loss'):
-            self.losses = abs(self.scores - self.input_y)
+            self.losses = abs(self.scores/self.input_y - 1)
             self.loss = tf.reduce_mean(self.losses)
 
         with tf.name_scope('accuracy'):

@@ -79,6 +79,3 @@ def save_featurecrosses_data(path):
     data_new = np.array(data_new)
 
     np.savetxt('data_new.txt', data_new)
-
-
-split(0.2, 'data_new.txt')
