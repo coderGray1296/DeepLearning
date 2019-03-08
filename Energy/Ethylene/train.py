@@ -83,7 +83,7 @@ with tf.Graph().as_default():
 
 
         model_saver = tf.train.Saver()
-
+        '''
         batches = data_helper.batch_iter(list(zip(x_train, y_train)), batch_size, num_epochs)
 
         train_loss_all = []
@@ -111,11 +111,22 @@ with tf.Graph().as_default():
         '''
         ckpt = tf.train.get_checkpoint_state("../checkpoint/")
         model_saver.restore(sess, ckpt.model_checkpoint_path)
-        #losses = test_step(x_test, y_test)
-        #print(losses)
-
+        loss,_ = test_step(x_test, y_test)
+        print(loss)
+        '''
+        result_dict = {}
         for i in range(10):
             result = []
-            loss, _ = test_step(x_test, y_test)
-            print(loss)
+            losses = test_step(x_test, y_test)
+            for j in range(len(losses)):
+                if losses[j]<0.05:
+                    result.append(j)
+            print(result)
+            for k in result:
+                if k in result_dict.keys():
+                    result_dict[k] += 1
+                else:
+                    result_dict[k] = 1
+        print(result_dict)
         '''
+
