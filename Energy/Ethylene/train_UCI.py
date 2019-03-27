@@ -9,7 +9,7 @@ import data_helper
 from tensorflow.contrib import learn
 import draw
 
-#设置训练集和测试集为4：1
+# 设置训练集和测试集为4：1
 test_sample_percentage = 0.2
 
 filter_sizes = [5, 2]
@@ -18,44 +18,44 @@ dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
 
 batch_size = 16
-num_epochs = 200
-#Evaluate model on dev set after this many steps (default: 100)
+num_epochs = 100
+# Evaluate model on dev set after this many steps (default: 100)
 evaluate_every = 10
-#Save model after this many steps (default: 100)
+# Save model after this many steps (default: 100)
 checkpoint_every = 100
-#Number of checkpoints to store (default: 5)
+# Number of checkpoints to store (default: 5)
 num_checkpoints = 5
 
-#Data Preparation
+# Data Preparation
 print('Loading data...')
-x_train, y_train = data_helper.load_data('train_new.txt')
-x_test, y_test = data_helper.load_data('test_new.txt')
+x_train, y_train = data_helper.load_data('../data/UCI/train_airoil_new.txt')
+x_test, y_test = data_helper.load_data('../data/UCI/test_airoil_new.txt')
 
-
-#Training
-#==========================>
+# Training
+# ==========================>
 with tf.Graph().as_default():
     sess = tf.Session()
     with sess.as_default():
         cnn = CNN_NEW(
-            input_size = x_train.shape[1],
-            output_size = y_train.shape[1],
-            filter_sizes = filter_sizes,
-            num_filters = num_filters,
-            l2_reg_lambda = l2_reg_lambda
+            input_size=x_train.shape[1],
+            output_size=y_train.shape[1],
+            filter_sizes=filter_sizes,
+            num_filters=num_filters,
+            l2_reg_lambda=l2_reg_lambda
         )
-        
-        #定义training步骤
+
+        # 定义training步骤
         global_step = tf.Variable(0, name="global_step", trainable=False)
         # print(global_step)
         optimizer = tf.train.AdamOptimizer(1e-3)
         grads_and_vars = optimizer.compute_gradients(cnn.loss)
         train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
-        
+
         # 初始化所有变量
         sess.run(tf.global_variables_initializer())
-        
-        #training step
+
+
+        # training step
         def train_step(x_batch, y_batch):
             feed_dict = {
                 cnn.input_x: x_batch,
@@ -67,7 +67,7 @@ with tf.Graph().as_default():
             time_str = datetime.datetime.now().isoformat()
             print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
             return loss, accuracy
-        
+
 
         def test_step(x_batch, y_batch):
             feed_dict = {
@@ -90,7 +90,7 @@ with tf.Graph().as_default():
         train_accuracy_all = []
         test_loss_all = []
         test_accuracy_all = []
-        
+
         for batch in batches:
             x_batch, y_batch = zip(*batch)
             loss_train, accuracy_train = train_step(x_batch, y_batch)
@@ -103,30 +103,53 @@ with tf.Graph().as_default():
                 test_accuracy_all.append(accuracy_test)
         #losses = test_step(x_test, y_test)
         #print(losses)
-        model_saver.save(sess, '../checkpoint/result.ckpt', global_step=global_step)
+        model_saver.save(sess, '../checkpoint_airoil/result.ckpt', global_step=global_step)
 
         # draw picture for loss and accuracy of test and train
         draw.draw_picture('train', train_accuracy_all, train_loss_all)
         draw.draw_picture('test', test_accuracy_all, test_loss_all)
         '''
-        ckpt = tf.train.get_checkpoint_state("../checkpoint/")
+        ckpt = tf.train.get_checkpoint_state("../checkpoint_airoil/")
         model_saver.restore(sess, ckpt.model_checkpoint_path)
-        loss,_ = test_step(x_test, y_test)
-        print(loss)
+        loss= test_step(x_test,y_test)
+        index = []
+        new_loss = []
+        for i in range(len(loss)):
+            if loss[i]<0.2:
+                new_loss.append(loss[i])
+                index.append(i)
+        print(len(new_loss))
+        print(np.mean(new_loss))
+
+        temp_x = []
+        temp_y = []
+        for i in index:
+            temp_x.append(x_test[i])
+            temp_y.append(y_test[i])
+        new_data = np.append(temp_x, temp_y, axis=1)
+        np.savetxt('../data/UCI/test_airoil_picked.txt', new_data)
+
         
-        result_dict = {}
+        index_dict = {}
         for i in range(10):
-            result = []
-            losses = test_step(x_test, y_test)
-            for j in range(len(losses)):
-                if losses[j]<0.05:
-                    result.append(j)
-            print(result)
-            for k in result:
-                if k in result_dict.keys():
-                    result_dict[k] += 1
-                else:
-                    result_dict[k] = 1
-        print(result_dict)
+            loss = test_step(x_test, y_test)
+            for j in range(len(loss)):
+                if loss[j] < 0.1:
+                    if j in index_dict.keys():
+                        index_dict[j] += 1
+                    else:
+                        index_dict[j] = 1
+        print(index_dict)
+        index_final = []
+        for k in index_dict.keys():
+            if index_dict[k] >= 4:
+                index_final.append(k)
+        temp_x = []
+        temp_y = []
+        for i in index_final:
+            temp_x.append(x_test[i])
+            temp_y.append(y_test[i])
+        new_data = np.append(temp_x, temp_y, axis=1)
+        np.savetxt('../data/UCI/test_airoil_picked.txt', new_data)
         '''
 
