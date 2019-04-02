@@ -1,0 +1,2 @@
+model_checkpoint_path: "result.ckpt-2000"
+all_model_checkpoint_paths: "result.ckpt-2000"

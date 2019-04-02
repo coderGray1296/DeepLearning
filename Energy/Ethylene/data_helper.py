@@ -30,8 +30,8 @@ def load_data(path):
     X = []
     y = []
     for i in range(len(data)):
-        X.append(data[i][0:6])
-        y.append(data[i][6:])
+        X.append(data[i][0:10])
+        y.append(data[i][10:])
     return np.array(X), np.array(y)
 
 #读取数据，分离train和test
@@ -80,5 +80,13 @@ def save_featurecrosses_data(path):
 
     np.savetxt('../data/UCI/airoil_new.txt', data_new)
 
-
+#获取输出列的最大值和最小值，求逆归一化
+def get_min_max(path):
+    data = np.loadtxt(path)
+    y = data[:,5]
+    min_index = np.argmin(y)
+    max_index = np.argmax(y)
+    min_value = y[min_index]
+    max_value = y[max_index]
+    return min_value, max_value
 

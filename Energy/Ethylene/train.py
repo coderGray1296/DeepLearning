@@ -18,7 +18,7 @@ dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
 
 batch_size = 16
-num_epochs = 200
+num_epochs = 150
 #Evaluate model on dev set after this many steps (default: 100)
 evaluate_every = 10
 #Save model after this many steps (default: 100)
@@ -30,8 +30,8 @@ num_checkpoints = 5
 print('Loading data...')
 x_train, y_train = data_helper.load_data('train_new.txt')
 x_test, y_test = data_helper.load_data('test_new.txt')
-
-
+min_value, max_value = data_helper.get_min_max('data.txt')
+print(min_value,max_value)
 #Training
 #==========================>
 with tf.Graph().as_default():
@@ -75,7 +75,7 @@ with tf.Graph().as_default():
                 cnn.input_y: y_batch,
                 cnn.dropout_keep_prob: 0.5
             }
-            losses, loss, accuracy = sess.run([cnn.losses, cnn.loss, cnn.accuracy],
+            losses, loss, accuracy, scores = sess.run([cnn.losses, cnn.loss, cnn.accuracy, cnn.scores],
                                               feed_dict)
             # time_str = datetime.datetime.now().isoformat()
             # print("{}: step {},loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
@@ -90,7 +90,7 @@ with tf.Graph().as_default():
         train_accuracy_all = []
         test_loss_all = []
         test_accuracy_all = []
-        
+        '''
         for batch in batches:
             x_batch, y_batch = zip(*batch)
             loss_train, accuracy_train = train_step(x_batch, y_batch)
@@ -103,7 +103,7 @@ with tf.Graph().as_default():
                 test_accuracy_all.append(accuracy_test)
         #losses = test_step(x_test, y_test)
         #print(losses)
-        model_saver.save(sess, '../checkpoint/result.ckpt', global_step=global_step)
+        model_saver.save(sess, '../checkpoints/result.ckpt', global_step=global_step)
 
         # draw picture for loss and accuracy of test and train
         draw.draw_picture('train', train_accuracy_all, train_loss_all)
@@ -111,9 +111,9 @@ with tf.Graph().as_default():
         '''
         ckpt = tf.train.get_checkpoint_state("../checkpoint/")
         model_saver.restore(sess, ckpt.model_checkpoint_path)
-        loss,_ = test_step(x_test, y_test)
+        loss, _= test_step(x_test, y_test)
         print(loss)
-        
+        '''
         result_dict = {}
         for i in range(10):
             result = []

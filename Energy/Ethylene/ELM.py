@@ -40,9 +40,9 @@ class HiddenLayer:
         print(self.losses.shape)
         return np.mean(self.losses)
 
-train_x, train_y = data_helper.load_data('../data/UCI/train_ccpp_new.txt')
-test_x, test_y = data_helper.load_data('../data/UCI/test_ccpp_picked.txt')
-elm = HiddenLayer(train_x, 56)
+train_x, train_y = data_helper.load_data('train_new.txt')
+test_x, test_y = data_helper.load_data('test_new.txt')
+elm = HiddenLayer(train_x, 10)
 elm.regressor_train(train_y)
 output_y = elm.regressor_test(test_x)
 loss = elm.relative_error(test_y, output_y)
