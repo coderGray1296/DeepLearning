@@ -1,0 +1,3 @@
+# Tensorflow的Data Pipeline系列教程
+## 前言
+在tensorflow中，训练数据常常需要经过随机打乱、分成一个一个的batch来进行训练，当然有很多的方式可以完成，比如我们可以通过传统的python方法构建迭代器，我们也可以使用其它的一些方法，但是tensorflow本身提供了强大的data pipeline处理机制，本文就来详细说明一下。
